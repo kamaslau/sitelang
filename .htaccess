@@ -1,0 +1,8 @@
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^(accuvate\.com|www\.accuvate\.com|sitelang\.cn)$ [NC]
+RewriteRule ^(.*)$ http://www.sitelang.cn/$1 [L,R=301]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond $1 !^(index\.php|images|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1 [L]

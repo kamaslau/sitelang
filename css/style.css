@@ -1,0 +1,49 @@
+@charset "utf-8";
+@viewport			{width:device-width;}
+@-webkit-viewport	{width:device-width;}
+@-moz-viewport      {width:device-width;}
+@-ms-viewport       {width:device-width;}
+@-o-viewport        {width:device-width;}
+
+body{font-family:"华文黑体","Microsoft Yahei","SimHei",verdana,arial,sans-serif;color:#666;}
+a{color:#73c6c8;}
+	a:hover,a:active{color:#5a707b;text-decoration:none;}
+table{border:1px 0;}
+	td:last-child li{margin-bottom:6px;}
+.btn{background-image:none;border-color:none !important;}
+
+.navbar{background:#fff;background-image:none !important;box-shadow:0 0 4px rgba(0,0,0,0.1);}
+.panel,.panel-heading{border-radius:0;}
+.panel-heading{background:#f8f8f8;background-image:none !important;border-bottom:1px solid #e9edee;height:40px;line-height:40px;padding-left:24px;}
+
+#header{padding:10px 0;border-top:4px solid #73c6c8;}
+	#header h1{margin:0;}
+		a#logo{background:transparent url(http://images.key2all.com/logo/brand/3_250x50.png) no-repeat left center;display:block;width:250px;height:50px;text-indent:-999em;}
+
+#maincontainer{margin-top:80px;}
+@media (min-width:640px) and (max-width:970px){
+	#maincontainer{margin-top:130px;}
+}
+
+#sidebar iframe{background:#fff;}
+
+#footer{background:#fff;box-shadow:0 0 4px rgba(0,0,0,0.1);margin-top:20px;}
+	#footer p,#footer ul{margin:0;height:56px;line-height:56px;}
+	#footer a{color:#666;}
+
+/*首页*/
+body.home{background-color:#f2f2f2;}
+@media (max-width:640px){
+	.home #content,.home #sidebar{padding:0;}
+}
+.home #general_info{padding:12px 20px;margin-bottom:8px;}
+.home #general_info p:last-child{margin-bottom:0;}
+.home .panel-body{margin:0;padding:0;}
+	.home .panel-body>li{border-bottom:1px solid #e9edee;border-right:1px solid #e9edee;height:100px;padding:20px;}
+	.home .brief{text-align:right;}
+
+.stuff tr.qrcode{display:none;}
+
+/* jqueryUI */
+.ui-widget-header{background-color:#73c6c8;border:0;}
+.ui-datapicker-header{padding:0;}
