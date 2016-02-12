@@ -1,6 +1,12 @@
 <?php
 	if(!defined('BASEPATH')) exit('此文件不可被直接访问');
 
+	/**
+	* Manager Class
+	*
+	* @author Kamas 'Iceberg' Lau <kamaslau@outlook.com>
+	* @copyright SenseStrong <www.sensestrong.com>
+	*/
 	class Manager extends CI_Controller
 	{
 		public function __construct()
@@ -11,18 +17,18 @@
 			$this->load->model('stuff_model');
 		}
 
-		//用户登录
+		// 用户登录
 		public function login()
 		{
-			//若已登录，则直接转到首页
-			if($this->session->userdata('logged_in') === TRUE):
+			// 若已登录，则直接转到首页
+			if($this->session->logged_in === TRUE):
 				redirect(base_url());
 			endif;
 			
-			//向闪出session记录来源网址以备登录成功时跳转
-			if($this->input->server('HTTP_REFERER')):
+			// 向闪出session记录来源网址以备登录成功时跳转
+			if ($this->input->server('HTTP_REFERER')):
 				$this->session->set_flashdata('referer' , $this->input->server('HTTP_REFERER'));
-			elseif($this->session->flashdata('referer')):
+			elseif ($this->session->flashdata('referer')):
 				$this->session->keep_flashdata('referer');
 			endif;
 
@@ -32,18 +38,18 @@
 			$this->form_validation->set_rules('mobile', '手机号', 'trim|required|is_natural|exact_length[11]');
 			$this->form_validation->set_rules('password', '密码', 'trim|required|is_natural|exact_length[6]');
 
-			if($this->form_validation->run() === FALSE):
+			if ($this->form_validation->run() === FALSE):
 				$this->load->view('templates/header', $data);
 				$this->load->view('manager/login', $data);
 				$this->load->view('templates/footer');
 
 			else:
-				//成功登录
-				if($this->manager_model->login()):
-					//获取员工信息
+				// 成功登录
+				if ($this->manager_model->login()):
+					// 获取员工信息
 					$data['manager'] = $this->manager_model->login();
 					
-					//将员工信息写入session、cookie并转到首页
+					// 将员工信息写入session、cookie并转到首页
 					$manager_data = array(
 						'manager_id' => $data['manager']['stuff_id'],
 						'lastname'	=> $data['manager']['lastname'],
@@ -55,31 +61,31 @@
 						'biz_id' => $data['manager']['biz_id'],
 						'logged_in' => TRUE
 					);
-					if(!empty($data['manager']['brand_id'])):
+					if (!empty($data['manager']['brand_id'])):
 						$manager_data['brand_id'] = $data['manager']['brand_id'];
 					endif;
-					if(!empty($data['manager']['branch_id'])):
+					if (!empty($data['manager']['branch_id'])):
 						$manager_data['branch_id'] = $data['manager']['branch_id'];
 					endif;
 					
-					$this->session->set_userdata( $manager_data );
-					//将员工ID及手机号写入cookie并保存1年
+					$this->session->set_userdata($manager_data);
+					// 将员工ID及手机号写入cookie并保存1年
 					$this->input->set_cookie('manager_mobile', $data['manager']['mobile'], 60*60*24*365);
 					$this->input->set_cookie('manager_id', $data['manager']['stuff_id'], 60*60*24*365);
-					if($this->session->flashdata('referer') && $this->session->flashdata('referer') != base_url()):
+					if ($this->session->flashdata('referer') && $this->session->flashdata('referer') != base_url()):
 						redirect($this->session->flashdata('referer'));
 					else:
 						redirect(base_url());
 					endif;
 		
-				//若员工不存在
-				elseif(!$this->stuff_model->stuff_check()):
+				// 若员工不存在
+				elseif (!$this->stuff_model->stuff_check()):
 					$data['error'] = '<p>这个手机号尚未被注册，请确认。</p>';
 					$this->load->view('templates/header', $data);
 					$this->load->view('manager/login', $data);
 					$this->load->view('templates/footer');
 			
-				//若密码错误
+				// 若密码错误
 				else:
 					$data['error'] = '<p>密码不正确，请重试。</p>';
 					$this->load->view('templates/header', $data);
@@ -89,14 +95,14 @@
 			endif;
 		}
 
-		//管理员退出
+		// 管理员退出
 		public function logout()
 		{
 			$this->session->sess_destroy();
-			//转到首页
+			// 转到首页
 			redirect(base_url());
 		}
 	}
 	
-/* End of file manager.php */
-/* Location: ./application/controllers/manager.php */
+/* End of file Manager.php */
+/* Location: ./application/controllers/Manager.php */

@@ -1,19 +1,25 @@
 <?php
 	if(!defined('BASEPATH')) exit('此文件不可被直接访问');
 
+	/**
+	* Activity Class
+	*
+	* @author Kamas 'Iceberg' Lau <kamaslau@outlook.com>
+	* @copyright SenseStrong <www.sensestrong.com>
+	*/
 	class Activity extends CI_Controller
 	{
 		public function __construct()
 		{
 			parent::__construct();
 			
-			//若未登录，转到登录页
-			if($this->session->userdata('logged_in') != TRUE):
+			// Redirect to login page if not logged in.
+			if ($this->session->logged_in != TRUE):
 				redirect(base_url('login'));
 			endif;
 			
-			//只有门店/分公司以上级别管理员可以对活动进行管理
-			if($this->session->userdata('level') < 5):
+			// 只有门店/分公司以上级别管理员可以对活动进行管理
+			if ($this->session->level < 5):
 				redirect(base_url());
 			endif;
 			
@@ -25,7 +31,7 @@
 			$this->load->model('stuff_model');
 		}
 		
-		//活动控制台首页
+		// 活动管理首页
 		public function index($activity_id = FALSE)
 		{
 			$data['class'] = 'activity';
@@ -33,7 +39,7 @@
 			
 			$this->load->view('templates/header', $data);
 			
-			if($activity_id == FALSE):
+			if ($activity_id == FALSE):
 				$data['activities'] = $this->activity_model->select();
 				$this->load->view('activity/index', $data);
 				
@@ -49,7 +55,7 @@
 			$this->load->view('templates/footer');
 		}
 		
-		//新建活动
+		// 新建活动
 		public function create()
 		{
 			$data['bizs'] = $this->biz_model->select();
@@ -66,7 +72,7 @@
 			$this->form_validation->set_rules('time_end', '结束时间', 'trim');
 			$this->form_validation->set_rules('detail', '活动简介', 'trim');
 		
-			//若表单提交不成功
+			// 若表单提交不成功
 			if ($this->form_validation->run() === FALSE):
 				$this->load->view('templates/header', $data);
 				$this->load->view('activity/create', $data);
@@ -81,7 +87,7 @@
 			endif;
 		}
 		
-		//删除活动（标记为已删除状态）
+		// 删除活动（标记为已删除状态）
 		public function delete($activity_id)
 		{
 			$data['class'] = 'activity';
@@ -102,7 +108,7 @@
 			endif;
 		}
 		
-		//编辑活动
+		// TODO:编辑活动
 		public function edit($activity_id)
 		{
 			$data['class'] = 'activity';
@@ -114,5 +120,5 @@
 		}
 	}
 
-/* End of file activity.php */
-/* Location: ./application/controllers/activity.php */
+/* End of file Activity.php */
+/* Location: ./application/controllers/Activity.php */

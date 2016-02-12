@@ -1,19 +1,25 @@
 <?php
 	if(!defined('BASEPATH')) exit('此文件不可被直接访问');
 
+	/**
+	* Marketing Class
+	*
+	* @author Kamas 'Iceberg' Lau <kamaslau@outlook.com>
+	* @copyright SenseStrong <www.sensestrong.com>
+	*/
 	class Marketing extends CI_Controller
 	{
 		public function __construct()
 		{
 			parent::__construct();
 			
-			//若未登录，转到登录页
-			if($this->session->userdata('logged_in') != TRUE):
+			// Redirect to login page if not logged in.
+			if ($this->session->logged_in != TRUE):
 				redirect(base_url('login'));
 			endif;
 			
-			//只有品牌以上级别管理员可以对营销进行管理
-			if($this->session->userdata('level') < 6):
+			// 只有品牌以上级别管理员可以对营销进行管理
+			if ($this->session->level < 6):
 				redirect(base_url());
 			endif;
 			
@@ -27,7 +33,7 @@
 			$this->load->model('stuff_model');
 		}
 		
-		//营销活动首页
+		// 营销活动首页
 		public function index()
 		{
 			$data['class'] = 'marketing';
@@ -42,7 +48,7 @@
 			$this->load->view('templates/footer');
 		}
 		
-		//新建营销活动
+		// TODO:新建营销活动
 		public function create()
 		{
 			$data['class'] = 'marketing';
@@ -59,5 +65,5 @@
 
 	}
 	
-/* End of file marketing.php */
-/* Location: ./application/controllers/marketing.php */
+/* End of file Marketing.php */
+/* Location: ./application/controllers/Marketing.php */

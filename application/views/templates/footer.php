@@ -3,11 +3,11 @@
 			<p id=copyright>&copy;<?php echo date('Y'); ?> <a title="思特朗精准管理中枢" href="<?php echo base_url(); ?>">思特朗</a> <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">鲁ICP备14013078号</a> 思特朗精准管理中枢由<a id=support title="青岛森思壮电子商务有限公司" href="http://www.sensestrong.com/" target=_blank>森思壮SenseStrong</a>研发</p>
 		</footer>
 		<script>
-			//百度统计代码
+			// 百度统计代码
 			var _bdhmProtocol = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 			document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fb364fc0562b496249ad7bb1cd573ca78'%3E%3C/script%3E"));
 		
-			//隐藏微信底部导航栏
+			// 隐藏微信底部导航栏
 			document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 				WeixinJSBridge.call('hideToolbar');
 			});
@@ -16,8 +16,8 @@
 				// 表格可排序
 				$('table').tablesorter();
 				
-				//jQueryUi日期选择器(仅非iOS设备)
-				<?php if(!strpos($this->input->server('HTTP_USER_AGENT'), 'like Mac OS X')): ?>
+				// jQueryUi日期选择器(仅非iOS设备)
+				<?php if (!strpos($this->input->server('HTTP_USER_AGENT'), 'like Mac OS X')): ?>
 				$.datepicker.regional['zh-CN'] = {   
 				        clearText: '清除',
 				        clearStatus: '清除已选日期',   
@@ -59,7 +59,7 @@
 						  showMonthAfterYear:true
 					  }
 				  );
-				  <?php endif; ?>
+				  <?php endif ?>
 				// AJAX获取信息
 				/*
 				$('.branch td>a , .credit td>a , .order td>a, .summary td>a').hover(

@@ -1,6 +1,12 @@
 <?php
 	if(!defined('BASEPATH')) exit('此文件不可被直接访问');
 
+	/**
+	* R Class
+	*
+	* @author Kamas 'Iceberg' Lau <kamaslau@outlook.com>
+	* @copyright SenseStrong <www.sensestrong.com>
+	*/
 	class R extends CI_Controller
 	{
 		public function __construct()
@@ -23,12 +29,12 @@
 			@list($activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id) = split('/', $link);
 
 			// 验证是否存在activity_id指定的活动，若无则自动转到首页
-			if(!$this->referral_model->search_activity($activity_id)):
+			if (!$this->referral_model->search_activity($activity_id)):
 				//redirect(base_url().'?referral_error=no_activity'.'&user_ip='.$user_ip);
 			endif;
 
 			// 检查是否有12小时内同user_ip, activity_id, ad_id, poster_id, spreader_type, spreader_id的记录，若有则更新该记录的time_visit并返回referral_id
-			if($this->referral_model->find($user_ip, $activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id)):
+			if ($this->referral_model->find($user_ip, $activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id)):
 				$referral_id = $this->referral_model->find($user_ip, $activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id);
 				$this->referral_model->update_time($referral_id);
 
@@ -58,7 +64,7 @@
 		 */
 		public function index($url)
 		{
-			//记录IP地址待用，以防重定向后受访页面访客IP变为服务器本机IP
+			// 记录IP地址待用，以防重定向后受访页面访客IP变为服务器本机IP
 			if ($_SERVER['HTTP_CLIENT_IP']):
 				$user_ip = $_SERVER['HTTP_CLIENT_IP'];
 			elseif ($_SERVER['HTTP_X_FORWARDED_FOR']):
@@ -75,14 +81,14 @@
 				$user_ip = 'Unknown';
 			endif;
 			$user_ip = substr($user_ip, 0, stripos($user_ip, ','));
-			$user_agent = $this->session->userdata('user_agent');
+			$user_agent = $this->session->user_agent;
 
-			//解密链接
+			// 解密链接
 			$link = $this->decode($url);
-			//链接中仅允许存在正整数和“/”符号，否则跳转到首页
-			//未完成 需写入以下正则表达式：除了（1个正整数 | 1个正整数加1个"/"符号）之外的字符
+			// 链接中仅允许存在正整数和“/”符号，否则跳转到首页
+			// TODO:需写入以下正则表达式：除了（1个正整数 | 1个正整数加1个"/"符号）之外的字符
 			/*
-			if(preg_match('正则表达式', $link)):
+			if (preg_match('正则表达式', $link)):
 				echo '链接中仅允许存在正整数和“/”符号，否则跳转到首页';
 				echo $link;
 				exit;
@@ -90,15 +96,15 @@
 			endif;
 			*/
 
-			//拆分链接中的参数
+			// 拆分链接中的参数
 			@list($activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id) = split('/', $link);
 
 			//验证是否存在activity_id指定的活动，若无则自动转到首页
-			if(!$this->referral_model->search_activity($activity_id)):
+			if (!$this->referral_model->search_activity($activity_id)):
 				redirect(base_url().'?referral_error=no_activity'.'&user_ip='.$user_ip);
 			endif;
 
-			//检查是否有12小时内同user_ip, activity_id, ad_id, poster_id, spreader_type, spreader_id的记录，若有则更新该记录的time_visit并返回referral_id
+			// 检查是否有12小时内同user_ip, activity_id, ad_id, poster_id, spreader_type, spreader_id的记录，若有则更新该记录的time_visit并返回referral_id
 			if($this->referral_model->find($user_ip, $activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id)):
 				$referral_id = $this->referral_model->find($user_ip, $activity_id, $ad_id, $poster_id, $spreader_type, $spreader_id);
 				$this->referral_model->update_time($referral_id);
@@ -109,24 +115,24 @@
 
 			endif;
 
-			if($referral_id):
+			if ($referral_id):
 				//将返回的referral_id存入同域cookie待用30分钟
 				$this->input->set_cookie('referral_id', $referral_id, 60*30, '.sitelang.cn');
 
 				//获取活动对应的页面，若有则跳转到该页面并将referral_id通过url进行传递，若无则跳转到首页
-				if($this->referral_model->getUrl($activity_id)):
+				if ($this->referral_model->getUrl($activity_id)):
 					$url = $this->referral_model->getUrl($activity_id);
-					if(!empty($url)):
+					if (!empty($url)):
 						$url = 'http://'.$url.'/?referral_id='.$referral_id.'&user_ip='.$user_ip;
 						redirect($url);
 
 					else:
-						redirect(base_url().'?referral_id='.$referral_id.'&referral_error=no_url'.'&user_ip='.$user_ip);
+						redirect(base_url(). '?referral_id='. $referral_id. '&referral_error=no_url'. '&user_ip='.$user_ip);
 
 					endif;
 					
 				else:
-					redirect(base_url().'?referral_id='.$referral_id.'&referral_error=no_url'.'&user_ip='.$user_ip);
+					redirect(base_url(). '?referral_id='. $referral_id. '&referral_error=no_url'. '&user_ip='.$user_ip);
 					
 				endif;
 				
@@ -145,22 +151,22 @@
 		 */
 		public function generate($activity_id, $ad_id = NULL, $poster_id = NULL, $spreader_type = 1, $spreader_id = NULL)
 		{
-			//初步组合链接
+			// 初步组合链接
 			$link = $activity_id;
-			if(isset($ad_id)):
-				$link.= '/'.$ad_id;
+			if (isset($ad_id)):
+				$link .= '/'.$ad_id;
 			endif;
-			if(isset($poster_id)):
-				$link.= '/'.$poster_id;
+			if (isset($poster_id)):
+				$link .= '/'.$poster_id;
 			endif;
-			if(isset($spreader_type)):
-				$link.= '/'.$spreader_type;
+			if (isset($spreader_type)):
+				$link .= '/'.$spreader_type;
 			endif;
-			if(isset($spreader_id)):
-				$link.= '/'.$spreader_id;
+			if (isset($spreader_id)):
+				$link .= '/'.$spreader_id;
 			endif;
 
-			//将参数进行加密
+			// 将参数进行加密
 			$url = $this->encode($link);
 			echo $url;
 		}
@@ -191,3 +197,6 @@
 			return $link;
 		}
 	}
+	
+/* End of file R.php */
+/* Location: ./application/controllers/R.php */
